@@ -174,9 +174,9 @@ require("lazy").setup({
       },
       -- Document existing key chains
       spec = {
-        { '<leader>s', group = '[S]esrch' },
-        { '<leader>t', group = '[T]oggle' },
-        { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
+        { "<leader>s", group = "[S]esrch" },
+        { "<leader>t", group = "[T]oggle" },
+        { "<leader>h", group = "Git [H]unk", mode = { 'n', 'v' } },
       },
     },
   },
@@ -255,14 +255,14 @@ require("lazy").setup({
   },
 
   -- NOTE: I don't even know wtf, but there are errors in mason.
-  --
+
   -- Main LSP Configuration
   {
     "neovim/nvim-lspconfig",
     dependencies = {
       -- NOTE: `opts = {}` is the same as calling `require('mason').setup({})`
-      { "williamboman/mason.nvim", opts = {} },
-      "williamboman/mason-lspconfig.nvim",
+      { "mason-org/mason.nvim", opts = {} },
+      "mason-org/mason-lspconfig.nvim",
       "WhoIsSethDaniel/mason-tool-installer.nvim",
       -- Useful status updates for LSP.
       { "j-hui/fidget.nvim", opts = {} },
@@ -372,9 +372,6 @@ require("lazy").setup({
         },
       }
 
-      --  Create new capabilities with blink.cmp, and then broadcast that to the servers.
-      local capabilities = require("blink.cmp").get_lsp_capabilities()
-
       -- Enable the following language servers
       local servers = {
         clangd = {},
@@ -403,6 +400,9 @@ require("lazy").setup({
         },
       }
 
+      --  Create new capabilities with blink.cmp, and then broadcast that to the servers.
+      local capabilities = require("blink.cmp").get_lsp_capabilities()
+
       -- Ensure the servers and tools above are installed
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, { "stylua" })
@@ -413,7 +413,7 @@ require("lazy").setup({
         handlers = {
           function(server_name)
             local server = servers[server_name] or {}
-            server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
+            -- server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
             require("lspconfig")[server_name].setup(server)
           end,
         },
