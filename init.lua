@@ -63,6 +63,7 @@ vim.opt.scrolloff = 30
 -- Ask for confirmation in actions that could fail otherwise
 vim.opt.confirm = true
 
+vim.notify("BASIC CONFIGURATIONS SET")
 
 -- [[ BASIC KEYMAPS ]]
 -- Go back to the file explorer
@@ -89,6 +90,7 @@ vim.keymap.set('n', "<C-l>", "<C-w><C-l>", { desc = "Move focus to the right win
 vim.keymap.set('n', "<C-j>", "<C-w><C-j>", { desc = "Move focus to the lower window" })
 vim.keymap.set('n', "<C-k>", "<C-w><C-k>", { desc = "Move focus to the upper window" })
 
+vim.notify("BASIC KEYMAPS SET")
 
 -- [[ BASIC AUTOCOMMANDS ]]
 -- Highlight when yanking text
@@ -100,6 +102,7 @@ vim.api.nvim_create_autocmd("TextYankPost", {
   end,
 })
 
+vim.notify("BASIC AUTOCOMMANDS SET")
 
 -- [[ INSTALL LAZYVIM PLUGIN MANAGER ]]
 local lazypath = vim.fn.stdpath "data" .. "/lazy/lazy.nvim"
@@ -112,6 +115,7 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end ---@diagnostic disable-next-line: undefined-field
 vim.opt.rtp:prepend(lazypath)
 
+vim.notify("LAZYVIM SET")
 
 -- [[ INSTALL AND CONFIGURE PLUGINS ]]
 require("lazy").setup({
@@ -254,8 +258,6 @@ require("lazy").setup({
     },
   },
 
-  -- NOTE: I don't even know wtf, but there are errors in mason.
-
   -- Main LSP Configuration
   {
     "neovim/nvim-lspconfig",
@@ -380,12 +382,12 @@ require("lazy").setup({
         rust_analyzer = {},
         jdtls = {},
         intelephense = {},
+        ts_ls = {},
         html = {},
         cssls = {},
         vimls = {},
         marksman = {},
         bashls = {},
-        ast_grep = {},
         lua_ls = {
           -- cmd = { ... },
           -- filetypes = { ... },
@@ -399,22 +401,23 @@ require("lazy").setup({
           },
         },
       }
-
-      --  Create new capabilities with blink.cmp, and then broadcast that to the servers.
-      local capabilities = require("blink.cmp").get_lsp_capabilities()
-
       -- Ensure the servers and tools above are installed
-      local ensure_installed = vim.tbl_keys(servers or {})
-      vim.list_extend(ensure_installed, { "stylua" })
-      require("mason-tool-installer").setup { ensure_installed = ensure_installed }
+      local servers_to_configure = vim.tbl_keys(servers or {})
       require("mason-lspconfig").setup {
-        ensure_installed = {},
+        ensure_installed = servers_to_configure,
         automatic_installation = false,
+        automatic_enable = false,
         handlers = {
           function(server_name)
-            local server = servers[server_name] or {}
-            -- server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
-            require("lspconfig")[server_name].setup(server)
+            if servers[server_name] then
+              local server = servers[server_name] or {}
+              --  Create new capabilities with blink.cmp, and then broadcast that to the servers.
+              local capabilities = require("blink.cmp").get_lsp_capabilities()
+              server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
+              vim.notify("Configuring LSP server: " .. server_name, vim.log.levels.INFO)
+              require("lspconfig")[server_name].setup(server)
+              vim.notify("LSP handler finished for: " .. server_name, vim.log.levels.INFO)
+            end
           end,
         },
       }
