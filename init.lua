@@ -63,7 +63,6 @@ vim.opt.scrolloff = 30
 -- Ask for confirmation in actions that could fail otherwise
 vim.opt.confirm = true
 
-vim.notify("BASIC CONFIGURATIONS SET")
 
 -- [[ BASIC KEYMAPS ]]
 -- Go back to the file explorer
@@ -90,7 +89,6 @@ vim.keymap.set('n', "<C-l>", "<C-w><C-l>", { desc = "Move focus to the right win
 vim.keymap.set('n', "<C-j>", "<C-w><C-j>", { desc = "Move focus to the lower window" })
 vim.keymap.set('n', "<C-k>", "<C-w><C-k>", { desc = "Move focus to the upper window" })
 
-vim.notify("BASIC KEYMAPS SET")
 
 -- [[ BASIC AUTOCOMMANDS ]]
 -- Highlight when yanking text
@@ -102,7 +100,6 @@ vim.api.nvim_create_autocmd("TextYankPost", {
   end,
 })
 
-vim.notify("BASIC AUTOCOMMANDS SET")
 
 -- [[ INSTALL LAZYVIM PLUGIN MANAGER ]]
 local lazypath = vim.fn.stdpath "data" .. "/lazy/lazy.nvim"
@@ -115,7 +112,6 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end ---@diagnostic disable-next-line: undefined-field
 vim.opt.rtp:prepend(lazypath)
 
-vim.notify("LAZYVIM SET")
 
 -- [[ INSTALL AND CONFIGURE PLUGINS ]]
 require("lazy").setup({
@@ -414,15 +410,14 @@ require("lazy").setup({
               --  Create new capabilities with blink.cmp, and then broadcast that to the servers.
               local capabilities = require("blink.cmp").get_lsp_capabilities()
               server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
-              vim.notify("Configuring LSP server: " .. server_name, vim.log.levels.INFO)
               require("lspconfig")[server_name].setup(server)
-              vim.notify("LSP handler finished for: " .. server_name, vim.log.levels.INFO)
             end
           end,
         },
       }
     end,
   },
+
 
   --[[
   { -- Autoformat
@@ -635,6 +630,7 @@ require("lazy").setup({
       indent = { enable = true, disable = { "ruby" } },
     },
   },
+
 
   require "kickstart.plugins.debug",
   require "kickstart.plugins.autopairs",
