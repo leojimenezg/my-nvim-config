@@ -6,12 +6,13 @@ vim.g.maplocalleader = " "
 -- Set to true if a Nerd Font is installed and selected in the terminal.
 vim.g.have_nerd_font = false
 
--- NOTE: These are my prefered options
-
 -- Show line number
 vim.opt.number = true
 -- Show relative line number
 vim.opt.relativenumber = true
+-- Spaces representing a tab
+vim.opt.tabstop = 4
+vim.opt.shiftwidth = 4
 
 -- Enable mouse in all modes
 vim.opt.mouse = "a"
