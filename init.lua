@@ -18,7 +18,7 @@ vim.opt.shiftwidth = 4
 vim.opt.mouse = "a"
 
 -- Don't show the mode in bar
-vim.opt.showmode = false
+vim.opt.showmode = true
 
 -- Sync clipboard between OS and Neovim.
 vim.schedule(function()
@@ -42,7 +42,7 @@ vim.opt.signcolumn = "yes"
 vim.opt.updatetime = 250
 
 -- Decrease mapped sequence wait time
-vim.opt.timeoutlen = 300
+vim.opt.timeoutlen = 200
 
 -- Configure how new splits should be opened
 vim.opt.splitright = true
@@ -59,21 +59,21 @@ vim.opt.inccommand = "split"
 vim.opt.cursorline = true
 
 -- Minimal number of screen lines to keep above and below the cursor.
-vim.opt.scrolloff = 30
+vim.opt.scrolloff = 20
 
 -- Ask for confirmation in actions that could fail otherwise
 vim.opt.confirm = true
 
 
 -- [[ BASIC KEYMAPS ]]
--- Go back to the file explorer
-vim.keymap.set('n', "<leader>pv", "<cmd>Ex<CR>")
+-- Go back to the [F]ile [E]xplorer
+vim.keymap.set('n', "<leader>fe", "<cmd>Ex<CR>")
 
 -- Clear highlights on search when pressing <Esc> in normal mode
 vim.keymap.set('n', "<Esc>", "<cmd>nohlsearch<CR>")
 
 -- Diagnostic keymaps
-vim.keymap.set('n', "<leader>d", vim.diagnostic.setloclist, { desc = "Open [D]iagnostic uickfix list" })
+vim.keymap.set('n', "<leader>dl", vim.diagnostic.setloclist, { desc = "Open [D]iagnostic quickfix [L]ist" })
 
 -- Exit terminal mode in the builtin terminal
 vim.keymap.set('t', "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
@@ -133,55 +133,6 @@ require("lazy").setup({
     },
   },
 
-  -- Plugin to show the pending keybinds.
-  {
-    "folke/which-key.nvim",
-    event = "VimEnter",
-    opts = {
-      delay = 0,
-      icons = {
-        -- set icon mappings to true if a Nerd Font is installed
-        mappings = vim.g.have_nerd_font,
-        keys = vim.g.have_nerd_font and {} or {
-          Up = "<Up> ",
-          Down = "<Down> ",
-          Left = "<Left> ",
-          Right = "<Right> ",
-          C = "<C-…> ",
-          M = "<M-…> ",
-          D = "<D-…> ",
-          S = "<S-…> ",
-          CR = "<CR> ",
-          Esc = "<Esc> ",
-          ScrollWheelDown = "<ScrollWheelDown> ",
-          ScrollWheelUp = "<ScrollWheelUp> ",
-          NL = "<NL> ",
-          BS = "<BS> ",
-          Space = "<Space> ",
-          Tab = "<Tab> ",
-          F1 = "<F1>",
-          F2 = "<F2>",
-          F3 = "<F3>",
-          F4 = "<F4>",
-          F5 = "<F5>",
-          F6 = "<F6>",
-          F7 = "<F7>",
-          F8 = "<F8>",
-          F9 = "<F9>",
-          F10 = "<F10>",
-          F11 = "<F11>",
-          F12 = "<F12>",
-        },
-      },
-      -- Document existing key chains
-      spec = {
-        { "<leader>s", group = "[S]esrch" },
-        { "<leader>t", group = "[T]oggle" },
-        { "<leader>h", group = "Git [H]unk", mode = { 'n', 'v' } },
-      },
-    },
-  },
-
   -- Fuzzy Finder
   {
     "nvim-telescope/telescope.nvim",
@@ -195,26 +146,24 @@ require("lazy").setup({
           return vim.fn.executable "make" == 1
         end,
       },
-      { "nvim-telescope/telescope-ui-select.nvim" },
-
-      { "nvim-tree/nvim-web-devicons", enabled = vim.g.have_nerd_font },
+      "nvim-telescope/telescope-ui-select.nvim",
+      { 
+        "nvim-tree/nvim-web-devicons",
+        enabled = vim.g.have_nerd_font
+      },
     },
     config = function()
-      require("telescope").setup {
-        -- defaults = {
-        --   mappings = {},
-        -- },
-        -- pickers = {}
+      require("telescope").setup({
         extensions = {
           ["ui-select"] = {
             require("telescope.themes").get_dropdown(),
           },
         },
-      }
+      })
       pcall(require("telescope").load_extension, "fzf")
       pcall(require("telescope").load_extension, "ui-select")
 
-      local builtin = require "telescope.builtin"
+      local builtin = require("telescope.builtin")
       vim.keymap.set('n', "<leader>sh", builtin.help_tags, { desc = "[S]earch [H]elp" })
       vim.keymap.set('n', "<leader>sk", builtin.keymaps, { desc = "[S]earch [K]eymaps" })
       vim.keymap.set('n', "<leader>sf", builtin.find_files, { desc = "[S]earch [F]iles" })
@@ -385,18 +334,7 @@ require("lazy").setup({
         vimls = {},
         marksman = {},
         bashls = {},
-        lua_ls = {
-          -- cmd = { ... },
-          -- filetypes = { ... },
-          -- capabilities = {},
-          settings = {
-            Lua = {
-              completion = {
-                callSnippet = "Replace",
-              },
-            },
-          },
-        },
+        lua_ls = {},
       }
       -- Ensure the servers and tools above are installed
       local servers_to_configure = vim.tbl_keys(servers or {})
@@ -419,50 +357,6 @@ require("lazy").setup({
     end,
   },
 
-
-  --[[
-  { -- Autoformat
-    'stevearc/conform.nvim',
-    event = { 'BufWritePre' },
-    cmd = { 'ConformInfo' },
-    keys = {
-      {
-        '<leader>fb',
-        function()
-          require('conform').format { async = true, lsp_format = 'fallback' }
-        end,
-        mode = '',
-        desc = '[F]ormat [B]uffer',
-      },
-    },
-    opts = {
-      notify_on_error = false,
-      format_on_save = function(bufnr)
-        -- Disable "format_on_save lsp_fallback" for languages that don't
-        -- have a well standardized coding style. You can add additional
-        -- languages here or re-enable it for the disabled ones.
-        local disable_filetypes = { c = true, cpp = true }
-        if disable_filetypes[vim.bo[bufnr].filetype] then
-          return nil
-        else
-          return {
-            timeout_ms = 500,
-            lsp_format = 'fallback',
-          }
-        end
-      end,
-      formatters_by_ft = {
-        lua = { 'stylua' },
-        -- Conform can also run multiple formatters sequentially
-        -- python = { "isort", "black" },
-        --
-        -- You can use 'stop_after_first' to run the first available formatter from the list
-        -- javascript = { "prettierd", "prettier", stop_after_first = true },
-      },
-    },
-  },
-]]
-
   -- Autocompletion
   {
     "saghen/blink.cmp",
@@ -479,14 +373,7 @@ require("lazy").setup({
           end
           return "make install_jsregexp"
         end)(),
-        dependencies = {
-          -- {
-          --   'rafamadriz/friendly-snippets',
-          --   config = function()
-          --     require('luasnip.loaders.from_vscode').lazy_load()
-          --   end,
-          -- },
-        },
+        dependencies = {},
         opts = {},
       },
       "folke/lazydev.nvim",
@@ -553,47 +440,6 @@ require("lazy").setup({
     opts = { signs = false }
   },
 
-  --[[
-  -- Collection of various small independent plugins/modules
-  {
-    "echasnovski/mini.nvim",
-    config = function()
-      -- Better Around/Inside textobjects
-      --
-      -- Examples:
-      --  - va)  - [V]isually select [A]round [)]paren
-      --  - yinq - [Y]ank [I]nside [N]ext [Q]uote
-      --  - ci'  - [C]hange [I]nside [']quote
-      require('mini.ai').setup { n_lines = 500 }
-
-      -- Add/delete/replace surroundings (brackets, quotes, etc.)
-      --
-      -- - saiw) - [S]urround [A]dd [I]nner [W]ord [)]Paren
-      -- - sd'   - [S]urround [D]elete [']quotes
-      -- - sr)'  - [S]urround [R]eplace [)] [']
-      require('mini.surround').setup()
-
-      -- Simple and easy statusline.
-      --  You could remove this setup call if you don't like it,
-      --  and try some other statusline plugin
-      local statusline = require 'mini.statusline'
-      -- set use_icons to true if you have a Nerd Font
-      statusline.setup { use_icons = vim.g.have_nerd_font }
-
-      -- You can configure sections in the statusline by overriding their
-      -- default behavior. For example, here we set the section for
-      -- cursor location to LINE:COLUMN
-      ---@diagnostic disable-next-line: duplicate-set-field
-      statusline.section_location = function()
-        return '%2l:%-2v'
-      end
-
-      -- ... and there is more!
-      --  Check out: https://github.com/echasnovski/mini.nvim
-    end,
-  },
-  ]]
-
   -- Highlight, edit, and navigate code
   {
     "nvim-treesitter/nvim-treesitter",
@@ -632,14 +478,11 @@ require("lazy").setup({
     },
   },
 
-
   require "kickstart.plugins.debug",
   require "kickstart.plugins.autopairs",
   require "kickstart.plugins.neo-tree",
   require "kickstart.plugins.gitsigns",
 
-  --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
-  -- { import = 'custom.plugins' },
 }, {
   ui = {
     icons = vim.g.have_nerd_font and {} or {
