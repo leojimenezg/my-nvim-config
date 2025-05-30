@@ -2,6 +2,14 @@
 
 My personal Neovim configuration using Lua and Kickstart.nvim as the starting point.
 
-## Extra Stuff
+## Finally, everything works as expected
 
-For now, I've decided to take a break from intensive Neovim configuration. I definitely learned a lot – that's for sure! – but I feel like I'm not quite ready yet. I still haven't fully figured out my exact needs when it comes to editors. I think I need to learn a lot more about other things and get better at various aspects before diving back into this. So, for the moment, I'll keep learning, but one step at a time.
+After wrestling with my Neovim setup for a while, everything is finally working the way I wanted. The root of the problem? I was stubbornly sticking to Nvim v0.10.4, never even questioning if a newer version might solve anything.
+
+It wasn’t until I hit a persistent error with `mason-lspconfig` directly tied to my outdated Nvim version, that I decided (more out of despair than strategy) to upgrade to v0.11.1.
+
+And just like that, everything clicked into place.
+
+Now Neovim runs smoothly, my config behaves, and most importantly, I can finally say with satisfaction:
+"I use Neovim, btw."
+
