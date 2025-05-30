@@ -10,6 +10,8 @@ vim.g.have_nerd_font = false
 vim.opt.number = true
 -- Show relative line number
 vim.opt.relativenumber = true
+-- Show the cursor as a bar
+vim.opt.guicursor = ""
 -- Spaces representing a tab
 vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4
@@ -42,7 +44,7 @@ vim.opt.signcolumn = "yes"
 vim.opt.updatetime = 250
 
 -- Decrease mapped sequence wait time
-vim.opt.timeoutlen = 200
+vim.opt.timeoutlen = 500
 
 -- Configure how new splits should be opened
 vim.opt.splitright = true
@@ -133,6 +135,13 @@ require("lazy").setup({
     },
   },
 
+  -- Autopairs
+  {
+    "windwp/nvim-autopairs",
+    event = "InsertEnter",
+    config = true
+  },
+
   -- Fuzzy Finder
   {
     "nvim-telescope/telescope.nvim",
@@ -208,7 +217,6 @@ require("lazy").setup({
   {
     "neovim/nvim-lspconfig",
     dependencies = {
-      -- NOTE: `opts = {}` is the same as calling `require('mason').setup({})`
       { "mason-org/mason.nvim", opts = {} },
       "mason-org/mason-lspconfig.nvim",
       "WhoIsSethDaniel/mason-tool-installer.nvim",
@@ -334,23 +342,32 @@ require("lazy").setup({
         vimls = {},
         marksman = {},
         bashls = {},
-        lua_ls = {},
+        lua_ls = {
+          settings = {
+            Lua = {
+              completion = {
+                callSnippet = 'Replace',
+              },
+              diagnostics = {
+                globals = { 'vim' },
+              },
+            },
+          },
+        },
       }
+
+      -- Get capabilities from blink.cmp
+      local capabilities = require("blink.cmp").get_lsp_capabilities()
+
       -- Ensure the servers and tools above are installed
-      local servers_to_configure = vim.tbl_keys(servers or {})
       require("mason-lspconfig").setup {
-        ensure_installed = servers_to_configure,
-        automatic_installation = false,
-        automatic_enable = false,
+        ensure_installed = vim.tbl_keys(servers),
         handlers = {
+          -- Default handler for all servers
           function(server_name)
-            if servers[server_name] then
-              local server = servers[server_name] or {}
-              --  Create new capabilities with blink.cmp, and then broadcast that to the servers.
-              local capabilities = require("blink.cmp").get_lsp_capabilities()
-              server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
-              require("lspconfig")[server_name].setup(server)
-            end
+            local server_config = servers[server_name] or {}
+            server_config.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server_config.capabilities or {})
+            require("lspconfig")[server_name].setup(server_config)
           end,
         },
       }
@@ -477,12 +494,6 @@ require("lazy").setup({
       indent = { enable = true, disable = { "ruby" } },
     },
   },
-
-  require "kickstart.plugins.debug",
-  require "kickstart.plugins.autopairs",
-  require "kickstart.plugins.neo-tree",
-  require "kickstart.plugins.gitsigns",
-
 }, {
   ui = {
     icons = vim.g.have_nerd_font and {} or {
