@@ -19,7 +19,7 @@ vim.opt.shiftwidth = 4
 -- Enable mouse in all modes
 vim.opt.mouse = "a"
 
--- Don't show the mode in bar
+-- Show the mode in bar
 vim.opt.showmode = true
 
 -- Sync clipboard between OS and Neovim.
@@ -436,17 +436,17 @@ require("lazy").setup({
     },
   },
 
-  -- Onedark colorscheme
+  -- No Clown Fiesta colorscheme
   {
-    "navarasu/onedark.nvim",
+    "aktersnurra/no-clown-fiesta.nvim",
     priority = 1000,
-    config = function()
-      require("onedark").setup {
-        style = "deep"
+    config = function ()
+      require("no-clown-fiesta").setup {
+        styles = {},
       }
-      -- Enable theme
-      require("onedark").load()
-    end
+      require("no-clown-fiesta").load()
+    end,
+    lazy = false,
   },
 
   -- Highlight todo, notes, etc in comments
