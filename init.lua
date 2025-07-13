@@ -156,7 +156,7 @@ require("lazy").setup({
         end,
       },
       "nvim-telescope/telescope-ui-select.nvim",
-      { 
+      {
         "nvim-tree/nvim-web-devicons",
         enabled = vim.g.have_nerd_font
       },
@@ -332,7 +332,7 @@ require("lazy").setup({
       local servers = {
         clangd = {},
         gopls = {},
-        pyright = {},
+        pylsp = {},
         rust_analyzer = {},
         jdtls = {},
         intelephense = {},
