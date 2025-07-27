@@ -436,6 +436,7 @@ require("lazy").setup({
     },
   },
 
+  --[[
   -- No Clown Fiesta colorscheme
   {
     "aktersnurra/no-clown-fiesta.nvim",
@@ -447,6 +448,37 @@ require("lazy").setup({
       require("no-clown-fiesta").load()
     end,
     lazy = false,
+  },
+  ]]
+
+  {
+    "zenbones-theme/zenbones.nvim",
+    dependencies = "rktjmp/lush.nvim",
+    lazy = false,
+    priority = 1000,
+    config = function()
+      vim.cmd.colorscheme('zenbones')
+      -- Eliminar todas las cursivas
+      vim.cmd([[
+      highlight Comment gui=NONE cterm=NONE
+      highlight @comment gui=NONE cterm=NONE
+      highlight @keyword gui=NONE cterm=NONE
+      highlight @function gui=NONE cterm=NONE
+      highlight @variable gui=NONE cterm=NONE
+      highlight @parameter gui=NONE cterm=NONE
+      highlight @type gui=NONE cterm=NONE
+      highlight @string gui=NONE cterm=NONE
+      highlight Keyword gui=NONE cterm=NONE
+      highlight Function gui=NONE cterm=NONE
+      highlight String gui=NONE cterm=NONE
+      highlight Type gui=NONE cterm=NONE
+      highlight @constant.macro gui=NONE cterm=NONE
+      highlight Macro gui=NONE cterm=NONE
+      highlight @boolean gui=NONE cterm=NONE
+      highlight Boolean gui=NONE cterm=NONE
+      highlight @constant.builtin gui=NONE cterm=NONE
+      ]])
+    end
   },
 
   -- Highlight todo, notes, etc in comments
