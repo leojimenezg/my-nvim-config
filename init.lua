@@ -451,34 +451,82 @@ require("lazy").setup({
   },
   ]]
 
+  -- {
+  --   "zenbones-theme/zenbones.nvim",
+  --   dependencies = "rktjmp/lush.nvim",
+  --   lazy = false,
+  --   priority = 1000,
+  --   config = function()
+  --     vim.cmd.colorscheme('zenbones')
+  --     -- Eliminar todas las cursivas
+  --     vim.cmd([[
+  --     highlight Comment gui=NONE cterm=NONE
+  --     highlight @comment gui=NONE cterm=NONE
+  --     highlight @keyword gui=NONE cterm=NONE
+  --     highlight @function gui=NONE cterm=NONE
+  --     highlight @variable gui=NONE cterm=NONE
+  --     highlight @parameter gui=NONE cterm=NONE
+  --     highlight @type gui=NONE cterm=NONE
+  --     highlight @string gui=NONE cterm=NONE
+  --     highlight Keyword gui=NONE cterm=NONE
+  --     highlight Function gui=NONE cterm=NONE
+  --     highlight String gui=NONE cterm=NONE
+  --     highlight Type gui=NONE cterm=NONE
+  --     highlight @constant.macro gui=NONE cterm=NONE
+  --     highlight Macro gui=NONE cterm=NONE
+  --     highlight @boolean gui=NONE cterm=NONE
+  --     highlight Boolean gui=NONE cterm=NONE
+  --     highlight @constant.builtin gui=NONE cterm=NONE
+  --     ]])
+  --   end
+  -- },
+
+  --Gruber-darker theme
   {
-    "zenbones-theme/zenbones.nvim",
-    dependencies = "rktjmp/lush.nvim",
-    lazy = false,
-    priority = 1000,
+    "blazkowolf/gruber-darker.nvim",
     config = function()
-      vim.cmd.colorscheme('zenbones')
-      -- Eliminar todas las cursivas
-      vim.cmd([[
-      highlight Comment gui=NONE cterm=NONE
-      highlight @comment gui=NONE cterm=NONE
-      highlight @keyword gui=NONE cterm=NONE
-      highlight @function gui=NONE cterm=NONE
-      highlight @variable gui=NONE cterm=NONE
-      highlight @parameter gui=NONE cterm=NONE
-      highlight @type gui=NONE cterm=NONE
-      highlight @string gui=NONE cterm=NONE
-      highlight Keyword gui=NONE cterm=NONE
-      highlight Function gui=NONE cterm=NONE
-      highlight String gui=NONE cterm=NONE
-      highlight Type gui=NONE cterm=NONE
-      highlight @constant.macro gui=NONE cterm=NONE
-      highlight Macro gui=NONE cterm=NONE
-      highlight @boolean gui=NONE cterm=NONE
-      highlight Boolean gui=NONE cterm=NONE
-      highlight @constant.builtin gui=NONE cterm=NONE
-      ]])
-    end
+      require("gruber-darker").setup({
+        bold = false,
+        italic = {
+          comments = true,
+          strings = false,
+          operators = false,
+          folds = false,
+        },
+        underline = false,
+        undercurl = true,
+        invert = {
+          signs = false,
+          tabline = false,
+          visual = false,
+        },
+      })
+
+      vim.cmd.colorscheme("gruber-darker")
+
+      vim.api.nvim_create_autocmd("ColorScheme", {
+        pattern = "gruber-darker",
+        callback = function()
+          vim.api.nvim_set_hl(0, "Normal", { fg = "#ffffff", bg = "#1e1e1e" })
+          vim.api.nvim_set_hl(0, "Character", { fg = "#4caf50" })
+          vim.api.nvim_set_hl(0, "@comment", { fg = "#7c8b94", italic = true })
+          vim.api.nvim_set_hl(0, "@spell", { fg = "#7c8b94", italic = true })
+          vim.api.nvim_set_hl(0, "@keyword", { fg = "#ffeb3b" })
+          vim.api.nvim_set_hl(0, "@string", { fg = "#4caf50" })
+          vim.api.nvim_set_hl(0, "@number", { fg = "#ff9800" })
+          vim.api.nvim_set_hl(0, "@function", { fg = "#ffffff" })
+          vim.api.nvim_set_hl(0, "@type.c", { fg = "#ffffff" })
+          vim.api.nvim_set_hl(0, "@type.definition.c", { fg = "#ffffff" })
+          vim.api.nvim_set_hl(0, "@property.c", { fg = "#ffffff" })
+          vim.api.nvim_set_hl(0, "@variable.c", { fg = "#ffffff" })
+          vim.api.nvim_set_hl(0, "@constant.c", { fg = "#ffffff" })
+          vim.api.nvim_set_hl(0, "@constant.macro.c", { fg = "#ffffff" })
+          vim.api.nvim_set_hl(0, "@punctuation.bracket.c", { fg = "#ffffff" })
+          vim.api.nvim_set_hl(0, "GruberDarkerYellow", { fg = "#c5c8c6" })
+          vim.api.nvim_set_hl(0, "GruberDarkerQuartz", { fg = "#c5c8c6" })
+        end,
+      })
+    end,
   },
 
   -- Highlight todo, notes, etc in comments
@@ -545,6 +593,8 @@ require("lazy").setup({
     },
   },
 })
+
+vim.cmd.colorscheme("gruber-darker")
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
