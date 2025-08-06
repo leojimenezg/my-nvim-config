@@ -533,7 +533,7 @@ require("lazy").setup({
     lazy = false,
     priority = 1000,
     config = function()
-      vim.cmd.colorscheme("minimal-madness")
+      vim.cmd.colorscheme("minimal-madness-nvim")
     end,
   },
 
