@@ -577,7 +577,7 @@ require("lazy").setup({
       auto_install = true,
       highlight = {
         enable = true,
-        additional_vim_regex_highlighting = { "ruby", "markdown" },
+        additional_vim_regex_highlighting = { "ruby", "markdown" , "go"},
       },
       indent = { enable = true, disable = { "ruby" } },
     },
