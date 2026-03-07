@@ -330,9 +330,14 @@ require("lazy").setup({
 
       -- Enable the following language servers
       local servers = {
+        taplo = {},
+        dockerls = {},
+        jsonls = {},
+        sqlls = {},
         clangd = {},
         gopls = {},
-        pylsp = {},
+        omnisharp = {},
+        basedpyright = {},
         rust_analyzer = {},
         jdtls = {},
         intelephense = {},
@@ -468,9 +473,12 @@ require("lazy").setup({
         "cpp",
         "css",
         "diff",
+        "dockerfile",
         "go",
+        "graphql",
         "html",
         "java",
+        "json",
         "lua",
         "luadoc",
         "markdown",
@@ -479,6 +487,8 @@ require("lazy").setup({
         "python",
         "query",
         "rust",
+        "sql",
+        "toml",
         "typescript",
         "vim",
         "vimdoc",
@@ -494,24 +504,24 @@ require("lazy").setup({
     },
   },
 }, {
-  ui = {
-    icons = vim.g.have_nerd_font and {} or {
-      cmd = '⌘',
-      config = '🛠',
-      event = '📅',
-      ft = '📂',
-      init = '⚙',
-      keys = '🗝',
-      plugin = '🔌',
-      runtime = '💻',
-      require = '🌙',
-      source = '📄',
-      start = '🚀',
-      task = '📌',
-      lazy = '💤 ',
+    ui = {
+      icons = vim.g.have_nerd_font and {} or {
+        cmd = '⌘',
+        config = '🛠',
+        event = '📅',
+        ft = '📂',
+        init = '⚙',
+        keys = '🗝',
+        plugin = '🔌',
+        runtime = '💻',
+        require = '🌙',
+        source = '📄',
+        start = '🚀',
+        task = '📌',
+        lazy = '💤 ',
+      },
     },
-  },
-})
+  })
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
