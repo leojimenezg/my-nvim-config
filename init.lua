@@ -365,11 +365,18 @@ require("lazy").setup({
       -- Get capabilities from blink.cmp
       local capabilities = require("blink.cmp").get_lsp_capabilities()
 
+      vim.lsp.config("basedpyright", {
+        settings = {
+          basedpyright = {
+            typeCheckingMode = "standard",
+          },
+        },
+      })
+
       -- Ensure the servers and tools above are installed
       require("mason-lspconfig").setup {
         ensure_installed = vim.tbl_keys(servers),
         handlers = {
-          -- Default handler for all servers
           function(server_name)
             local server_config = servers[server_name] or {}
             server_config.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server_config.capabilities or {})
